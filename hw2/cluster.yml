@@ -1,0 +1,47 @@
+# redis cluster
+version: "3.8"
+name: redis_cluster
+networks:
+    redis_network:
+        driver: bridge
+
+services:
+  redis-node-1:
+    image: redis
+    command: ["/tmp/redis.sh", "127.0.0.1", "7001"]
+    ports:
+      - 7001:7001
+    volumes:
+      - ./redis.sh:/tmp/redis.sh
+    networks:
+      - redis_network
+
+  redis-node-2:
+    image: redis
+    command: ["/tmp/redis.sh", "127.0.0.1", "7002"]
+    ports:
+      - 7002:7002
+    volumes:
+      - ./redis.sh:/tmp/redis.sh
+    networks:
+      - redis_network
+
+  redis-node-3:
+    image: redis
+    command: ["/tmp/redis.sh", "127.0.0.1", "7003"]
+    ports:
+      - 7003:7003
+    volumes:
+      - ./redis.sh:/tmp/redis.sh
+    networks:
+      - redis_network
+
+  redis-cluster-creator:
+    image: redis
+    command: redis-cli -a 'SUPER_SECRET_PASSWORD' --cluster create 127.0.0.1:7001 127.0.0.1:7002 127.0.0.1:7003 --cluster-replicas 1 --cluster-yes
+    depends_on:
+      - redis-node-1
+      - redis-node-2
+      - redis-node-3
+    networks:
+      - redis_network
