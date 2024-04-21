@@ -205,7 +205,7 @@ order by picks desc;
 Напишем функцию и добавим ее в `citus`.
 
 ```sql
--- Функция для создания s̶t̶r̶i̶k̶e̶t̶h̶r̶o̶u̶g̶h̶ строк нужна для
+-- Функция для создания s̶t̶r̶i̶k̶e̶t̶h̶r̶o̶u̶g̶h̶ строк
 create or replace function strike_through(str text) returns text as
 $$
     return '\u0336'.join(str) + '\u0336';
